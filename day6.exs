@@ -64,4 +64,21 @@ defmodule Part1 do
   end
 end
 
-Tools.get_input() |> Part1.compute() |> IO.puts()
+# Use math, O(1)
+defmodule Part2 do
+  def compute(map) do
+    times = Tuple.to_list(hd(map["Time"]))
+    distances = Tuple.to_list(hd(map["Distance"]))
+
+    Enum.zip(times, distances)
+    |> Enum.map(fn {t, d} ->
+      det = :math.sqrt(t * t - 4 * d)
+      r1 = (t + det) / 2
+      r2 = (t - det) / 2
+      trunc(:math.floor(r1) - :math.ceil(r2) + 1)
+    end)
+    |> Enum.product()
+  end
+end
+
+Tools.get_input() |> Part2.compute() |> IO.puts()
