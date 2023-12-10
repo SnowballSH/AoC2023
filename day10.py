@@ -89,6 +89,9 @@ components = 0
 component_count = []
 
 
+# Note: I was too lazy to convert this to stack-based.
+# Might exceed system stack limit but I managed to "cheat" by using pypy.
+# Please PR a stack-based function :)
 def floodfill(x, y, cnt):
     if x < 0 or x >= len(new_map) or y < 0 or y >= len(new_map[0]):
         return False
