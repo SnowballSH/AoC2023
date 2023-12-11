@@ -25,13 +25,18 @@ for i, line in enumerate(lines):
         if char == '#':
             grid_hash_locs.append((i, j))
 
-# Part 1: FACTOR = 2
+# Part 1:
+# FACTOR = 2
+# Part 2:
 FACTOR = 1_000_000
 s = 0
 for i in range(len(grid_hash_locs)):
     for j in range(i+1, len(grid_hash_locs)):
         x1, y1 = grid_hash_locs[i]
         x2, y2 = grid_hash_locs[j]
+
+        # NOTE: the following code can be improved to O(log N) using binary search on the sets.
+
         # number of no-hash rows between the two points
         n = 0
         for k in range(min(y1, y2), max(y1, y2)):
@@ -42,6 +47,8 @@ for i in range(len(grid_hash_locs)):
         for k in range(min(x1, x2), max(x1, x2)):
             if k in no_hash_rows:
                 m += 1
+
+        # Manhattan distance
         s += abs(y2 - y1) + (FACTOR - 1) * n + \
             abs(x2 - x1) + (FACTOR - 1) * m
 
