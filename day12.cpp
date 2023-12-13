@@ -67,54 +67,40 @@ int main()
 
         int m = numbers.size();
 
+        /*
+        Define DP[i, j, k], where
+            i is the index of the current character in s
+            j is the index of the current number in numbers
+            k is the current number of consecutive #s in s
+            DP[i, j, k] is the number of ways for the first i characters in s to match
+                the first j numbers in numbers, where the last k characters in s are consecutive #s
+        Base case:
+            DP[0, 0, 0] = 1
+        Recurrence:
+            DP[i + 1, j, k + 1] += DP[i, j, k] if s[i] == '#' or s[i] == '?' and k < numbers[j]
+            DP[i + 1, j, 0] += DP[i, j, k] if s[i] == '.' or s[i] == '?' and k == 0
+            DP[i + 1, j + 1, 0] += DP[i, j, k] if s[i] == '.' or s[i] == '?' and k == numbers[j]
+        */
         vector<vector<vector<long long>>> dp(n + 1, vector<vector<long long>>(m + 2, vector<long long>(max_number + 2, 0)));
         dp[0][0][0] = 1;
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i <= n; i++)
         {
             for (int j = 0; j <= m; j++)
             {
                 for (int k = 0; k <= max_number; k++)
                 {
-                    switch (s[i])
+                    if (s[i] == '#' || s[i] == '?')
                     {
-                    case '#':
-                        if (k + 1 <= numbers[j])
-                        {
-                            // Not done with this
+                        if (k < numbers[j])
                             dp[i + 1][j][k + 1] += dp[i][j][k];
-                        }
-                        break;
-                    case '.':
+                    }
+                    if (s[i] == '.' || s[i] == '?')
+                    {
                         if (k == 0)
-                        {
-                            // It's bad to rest when we are halfway through a chunk
                             dp[i + 1][j][0] += dp[i][j][k];
-                        }
                         else if (k == numbers[j])
-                        {
                             dp[i + 1][j + 1][0] += dp[i][j][k];
-                        }
-                        break;
-                    case '?':
-                        if (k + 1 <= numbers[j])
-                        {
-                            // Not done with this
-                            dp[i + 1][j][k + 1] += dp[i][j][k];
-                        }
-                        if (k == 0)
-                        {
-                            // It's bad to rest when we are halfway through a chunk
-                            dp[i + 1][j][0] += dp[i][j][k];
-                        }
-                        else if (k == numbers[j])
-                        {
-                            dp[i + 1][j + 1][0] += dp[i][j][k];
-                        }
-                        break;
-
-                    default:
-                        break;
                     }
                 }
             }
